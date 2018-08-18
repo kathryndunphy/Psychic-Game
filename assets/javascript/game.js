@@ -1,60 +1,62 @@
-var letters = [ "f", "m", "l"];
+	var letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
 
-var guessedLetters = [];
-
-var lettersToGuess = null;
-
-var guessesLeft = 7;
-
-var wins = 0;
-var losses = 0;
-
-var updateGuessesLeft = function() {
-    document.querySelector("#guesses-left").innerHTML = guessesLeft;
-};
-
-var updateLetterToGuess = function() {
-    letterToGuess = letters[Math.floor(Math.random() * letters.length)];
-    letters.length = 3;
-};
-
-var updateGuessesSoFar = function() {
-    document.querySelector("#guesses-so-far").innerHTML = guessedLetters.join(",");
-};
-
-var reset = function() {
-    guessesLeft = 7;
-    guessedLetters= [];
-    updateLetterToGuess();
-    updateGuessesLeft();
-    updateGuessesSoFar();
-};
-
-updateLetterToGuess();
-updateGuessesleft();
-
-document.onkeydown = function(event) {
-    guessesLeft--;
+	var win = 0;
+	var loss = 0;
+	var guessesLeft = 14;
+	var guessedLetters = [];
 
 
-var letter = String.fromCharCode(event.which).toLowerCase();
+	//reset everything to default and start a new game!
+	function reset() {
+	    guessesLeft = 14;
 
-guessedLetters.push(letter);
+	    guessedLetters = [];
+	    computerGuess = letters[Math.floor(Math.random() * letters.length)];
+	    console.log(computerGuess);
 
-updateGuessesLeft();
-updateLettersGuessed();
+	}
+	reset();
 
-if (letter === letterToGuess) {
-    wins++;
-    document.querySelector("#wins").innerHTML = wins;
+	function updateLetterToGuess() {
+	    guessedLetters = [];
+	    guessesLeft = 14;
+	    computerGuess = letters[Math.floor(Math.random() * letters.length)];
+	    console.log(computerGuess);
+	}
+	document.onkeydown = function (event) {
+	    var userGuess = String.fromCharCode(event.keyCode).toLowerCase();
+	    if (!/[a-z]/.test(userGuess)) {
+	        alert("Please choose letter only");
+	        guessesLeft++;
+	        loss--;
+	    }
 
-    reset();
-}
+	    if (guessedLetters.indexOf(userGuess) === -1) {
+	        guessedLetters.push(userGuess);
+	    } else {
+	        guessesLeft++;
+	        loss--;
+	    }
 
-if (guessesLeft === 0) {
-    losses++;
-    document.querySelector("#losses").innerHTML = losses;
+	    if (userGuess === computerGuess) {
+	        win++;
+	        alert("Your guess is right, let's try a new letter");
+	        updateLetterToGuess();
+	    } else {
+	        loss++;
+	        guessesLeft--;
+	    }
 
-    reset();
-}
-};
+	    if (guessesLeft === 0) {
+
+	        alert("You lost")
+	        reset();
+	    }
+
+	    document.querySelector('#win').innerHTML = "Win: " + win;
+	    document.querySelector('#loss').innerHTML = "Loss: " + loss;
+	    document.querySelector('#guessesLeft').innerHTML = "Guesses left: " + guessesLeft;
+	    document.querySelector('#guessofar').innerHTML = " Your Guesses: " + guessedLetters;
+
+
+	};
